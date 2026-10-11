@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naga Culinary Heritage — Oral Lore & Recipes</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        naga: {
+                            red: '#991B1B',       /* Crimson Naga Red */
+                            darkRed: '#7F1D1D',   /* Deep Hearth Red */
+                            amber: '#D97706',     /* Smoked Ochre */
+                            gold: '#F59E0B',      /* Roasted Amber */
+                            charcoal: '#111827',  /* Hearth Charcoal */
+                            warmBg: '#FAFAF9',    /* Sand Warm White */
+                            cardBg: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for horizontal filter chip scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Naga Heritage weave pattern header background */
+        .bg-weave-pattern {
+            background-color: #111827;
+            background-image: 
+                radial-gradient(#991B1B 0.8px, transparent 0.8px), 
+                radial-gradient(#C2410C 0.8px, #111827 0.8px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+        }
+    </style>
+</head>
+<body class="bg-stone-100/70 text-stone-800 font-sans min-h-screen flex flex-col pb-28">
+
+    <header class="sticky top-0 z-40 bg-stone-900 border-b-2 border-naga-red text-stone-100 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo & Brand Info -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="resetAllFilters()">
+                    <div class="w-10 h-10 rounded-xl bg-naga-red border border-naga-gold/50 flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-fire-burner text-amber-300 text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-1.5">
+                            <h1 class="font-heading text-lg sm:text-xl font-extrabold tracking-wider text-amber-400">NAGA</h1>
+                            <span class="text-[10px] bg-red-950 text-amber-300 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider border border-red-800">Heritage</span>
+                        </div>
+                        <p class="text-[10px] text-stone-400 font-medium">Culinary Lore & Audio Archive</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold uppercase tracking-wider text-stone-300">
+                    <a href="#explore" class="hover:text-amber-400 transition-colors py-1">Recipes</a>
+                    <button onclick="openTribeModal()" class="hover:text-amber-400 transition-colors py-1">Tribal Foodways</button>
+                    <button onclick="openSavedLoreModal()" class="hover:text-amber-400 transition-colors py-1 flex items-center space-x-1">
+                        <span>Bookmarks</span>
+                        <span id="nav-fav-badge" class="bg-naga-red text-white text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+                    </button>
+                </nav>
+
+                <!-- Actions / Mobile Menu Button -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="openSavedLoreModal()" class="md:hidden relative p-2 text-stone-300 hover:text-amber-400">
+                        <i class="fa-solid fa-bookmark text-lg"></i>
+                        <span id="mobile-fav-badge" class="absolute top-0 right-0 bg-naga-red text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-stone-200 hover:text-amber-400 rounded-lg">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-3 pb-4 space-y-2">
+            <a href="#explore" onclick="toggleMobileMenu()" class="block text-stone-200 hover:text-amber-400 text-xs uppercase tracking-wider font-semibold py-2">
+                <i class="fa-solid fa-utensils mr-2 text-amber-500"></i> Browse All Recipes
+            </a>
+            <button onclick="openTribeModal(); toggleMobileMenu();" class="w-full text-left text-stone-200 hover:text-amber-400 text-xs uppercase tracking-wider font-semibold py-2 border-t border-stone-800/80">
+                <i class="fa-solid fa-people-group mr-2 text-amber-500"></i> Tribal Traditions & Map
+            </button>
+        </div>
+    </header>
+
+    <section class="bg-weave-pattern text-stone-100 py-8 px-4 sm:px-6 relative border-b border-naga-gold/30">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <span class="inline-flex items-center space-x-1.5 px-3 py-1 bg-red-950/80 border border-naga-gold/40 text-amber-300 text-[11px] font-semibold uppercase tracking-wider rounded-full mb-3 shadow-sm">
+                <i class="fa-solid fa-volume-high text-xs animate-pulse text-amber-400"></i>
+                <span>Indigenous Audio Pronunciations Included</span>
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-heading font-bold text-amber-100 tracking-wide mb-2">
+                Authentic Naga Flavors & Lore
+            </h2>
+            <p class="text-stone-300 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+                Explore ancestral dishes from Nagaland’s indigenous tribes. Listen to native elders pronounce dish names and share authentic preparation heritage.
+            </p>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-stone-200/80 p-3 sm:p-4">
+            
+            <!-- Search Input Box -->
+            <div class="relative mb-3">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs sm:text-sm"></i>
+                <input type="text" id="search-input" onkeyup="filterRecipes()" 
+                       placeholder="Search Axone, Smoked Pork, Anishi..." 
+                       class="w-full pl-10 pr-9 py-2.5 bg-stone-50 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-naga-red focus:bg-white text-stone-800 text-xs sm:text-sm font-medium transition-all shadow-inner">
+                <button onclick="clearSearch()" id="clear-search-btn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600">
+                    <i class="fa-solid fa-circle-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Horizontal Scrollable Tribal Category Filter Chips -->
+            <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-1">
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-stone-400 flex-shrink-0 mr-1"><i class="fa-solid fa-filter mr-1"></i>Tribe:</span>
+                <button onclick="setTribeFilter('All')" class="tribe-chip active-chip text-xs px-3 py-1.5 rounded-lg font-bold flex-shrink-0 transition-all border border-naga-red bg-naga-red text-white shadow-sm">All Tribes</button>
+                <button onclick="setTribeFilter('Angami')" class="tribe-chip text-xs px-3 py-1.5 rounded-lg font-medium flex-shrink-0 transition-all border border-stone-200 bg-stone-100 text-stone-700 hover:bg-stone-200">Angami</button>
+                <button onclick="setTribeFilter('Ao')" class="tribe-chip text-xs px-3 py-1.5 rounded-lg font-medium flex-shrink-0 transition-all border border-stone-200 bg-stone-100 text-stone-700 hover:bg-stone-200">Ao</button>
+                <button onclick="setTribeFilter('Sumi')" class="tribe-chip text-xs px-3 py-1.5 rounded-lg font-medium flex-shrink-0 transition-all border border-stone-200 bg-stone-100 text-stone-700 hover:bg-stone-200">Sumi</button>
+                <button onclick="setTribeFilter('Lotha')" class="tribe-chip text-xs px-3 py-1.5 rounded-lg font-medium flex-shrink-0 transition-all border border-stone-200 bg-stone-100 text-stone-700 hover:bg-stone-200">Lotha</button>
+                <button onclick="setTribeFilter('Konyak')" class="tribe-chip text-xs px-3 py-1.5 rounded-lg font-medium flex-shrink-0 transition-all border border-stone-200 bg-stone-100 text-stone-700 hover:bg-stone-200">Konyak</button>
+                <button onclick="setTribeFilter('Chakhesang')" class="tribe-chip text-xs px-3 py-1.5 rounded-lg font-medium flex-shrink-0 transition-all border border-stone-200 bg-stone-100 text-stone-700 hover:bg-stone-200">Chakhesang</button>
+            </div>
+
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 flex-grow" id="explore">
+        
+        <!-- Results Counter -->
+        <div class="flex items-center justify-between mb-4 px-1">
+            <h3 class="font-heading font-bold text-stone-900 text-sm sm:text-base">Traditional Dishes</h3>
+            <span class="text-xs text-stone-500 font-semibold">Showing <span id="recipe-count" class="text-naga-red font-bold">6</span> recipes</span>
+        </div>
+
+        <!-- 2-Column Responsive Grid -->
+        <div id="recipe-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Dynamic Recipe Cards Rendered via JS -->
+        </div>
+
+        <!-- Empty State Container -->
+        <div id="empty-state" class="hidden text-center py-12 bg-white rounded-2xl border border-stone-200 shadow-sm mt-4">
+            <i class="fa-solid fa-mortar-pestle text-4xl text-amber-700/40 mb-3"></i>
+            <h4 class="font-heading font-bold text-stone-800 text-base mb-1">No Recipes Found</h4>
+            <p class="text-xs text-stone-500 max-w-xs mx-auto mb-4">No culinary heritage records match your search or selected tribal filter.</p>
+            <button onclick="resetAllFilters()" class="px-4 py-2 bg-naga-red text-white font-semibold text-xs rounded-lg shadow-sm hover:bg-red-900 transition-all">
+                Reset Filters
+            </button>
+        </div>
+    </main>
+
+    <div id="audio-player-bar" class="fixed bottom-0 inset-x-0 bg-stone-900 border-t-2 border-naga-gold text-stone-100 p-3 sm:p-4 shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            
+            <!-- Audio Meta Info -->
+            <div class="flex items-center space-x-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-naga-red/90 border border-amber-400/30 flex items-center justify-center text-amber-300 flex-shrink-0 shadow-md">
+                    <i class="fa-solid fa-volume-high text-base animate-pulse"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="flex items-center space-x-2">
+                        <span id="audio-tribe-badge" class="bg-red-950 text-amber-300 border border-red-800 text-[9px] font-bold px-1.5 py-0.2 rounded uppercase">Sumi</span>
+                        <span class="text-[10px] text-stone-400 uppercase tracking-widest hidden sm:inline">Oral Pronunciation & Lore</span>
+                    </div>
+                    <h4 id="audio-dish-title" class="font-heading text-xs sm:text-sm font-bold text-stone-100 truncate">Vak-Axone (Smoked Pork)</h4>
+                </div>
+            </div>
+
+            <!-- Audio Controls & Progress Indicator -->
+            <div class="flex items-center space-x-3 sm:space-x-4 flex-shrink-0">
+                <button onclick="toggleAudioPlayback()" id="audio-play-pause-btn" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-stone-950 flex items-center justify-center font-bold shadow-lg transition-transform transform active:scale-95">
+                    <i class="fa-solid fa-pause text-sm"></i>
+                </button>
+                
+                <div class="hidden md:flex flex-col w-36 sm:w-48">
+                    <div class="flex justify-between text-[10px] text-stone-400 mb-1">
+                        <span id="audio-current-time">0:00</span>
+                        <span>0:15</span>
+                    </div>
+                    <div class="w-full bg-stone-800 rounded-full h-1.5 overflow-hidden border border-stone-700">
+                        <div id="audio-progress-bar" class="bg-amber-400 h-full w-0 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <button onclick="closeAudioPlayer()" class="text-stone-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Tribal Traditions Modal -->
+    <div id="tribe-modal" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-stone-900 border border-amber-600/40 rounded-2xl max-w-lg w-full p-5 text-stone-100 relative shadow-2xl max-h-[85vh] overflow-y-auto">
+            <button onclick="closeTribeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="font-heading text-xl font-bold text-amber-400 mb-2">Nagaland's Tribal Foodways</h3>
+            <p class="text-stone-300 text-xs leading-relaxed mb-4">
+                Each of Nagaland’s indigenous tribes preserves specialized fermentation, wood-smoking, and wild herb foraging customs handed down across generations.
+            </p>
+            <div class="space-y-2.5 text-xs">
+                <div class="p-3 bg-stone-800/80 rounded-xl border border-stone-700/80">
+                    <h4 class="font-bold text-red-400">Sumi Tribe — Axone Mastery</h4>
+                    <p class="text-stone-300 text-[11px] mt-0.5">Known for authentic soybean fermentation wrapped in banana leaves and slow-cooked with cured smoked meats.</p>
+                </div>
+                <div class="p-3 bg-stone-800/80 rounded-xl border border-stone-700/80">
+                    <h4 class="font-bold text-red-400">Ao Tribe — Anishi Lore</h4>
+                    <p class="text-stone-300 text-[11px] mt-0.5">Specialists in pounding and fermenting fresh taro leaves into cakes (Anishi) dried over kitchen hearths.</p>
+                </div>
+                <div class="p-3 bg-stone-800/80 rounded-xl border border-stone-700/80">
+                    <h4 class="font-bold text-red-400">Angami Tribe — Fresh Herbs & Stews</h4>
+                    <p class="text-stone-300 text-[11px] mt-0.5">Famous for rich bamboo shoot stews and wholesome rice porridge dishes cooked with wild forest garlic.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookmarks Modal -->
+    <div id="saved-modal" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 relative shadow-2xl max-h-[80vh] flex flex-col">
+            <button onclick="closeSavedLoreModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="font-heading text-lg font-bold text-stone-900 mb-1">Bookmarked Recipes</h3>
+            <p class="text-stone-500 text-xs mb-3">Your saved heritage recipes for quick offline reference.</p>
+            
+            <div id="saved-list" class="flex-grow overflow-y-auto space-y-2 pr-1 my-2">
+                <!-- Dynamically populated bookmarks -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Naga Recipe Heritage Dataset
+        const recipesData = [
+            {
+                id: 1,
+                title: "Vak-Axone (Smoked Pork)",
+                tribe: "Sumi",
+                prepTime: "45 m",
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
+                description: "Smoked pork cooked with earthy fermented soybean paste (Axone) and King Chili.",
+                audioText: "Vak Axone. A Sumi Naga staple featuring smoked pork Belly slow simmered with fermented soybean paste and fiery Raja Mircha."
+            },
+            {
+                id: 2,
+                title: "Anishi With Cured Pork",
+                tribe: "Ao",
+                prepTime: "50 m",
+                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+                description: "Fermented yam leaf patties (Anishi) cooked into a rich gravy with wood-smoked pork.",
+                audioText: "Anishi Wo. An Ao Naga specialty prepared using smoke-dried fermented yam leaf cakes simmered with cured pork."
+            },
+            {
+                id: 3,
+                title: "Bamboo Shoot Pork Stew",
+                tribe: "Angami",
+                prepTime: "40 m",
+                image: "https://images.unsplash.com/photo-1514944288352-fffac99f0bdf?auto=format&fit=crop&w=600&q=80",
+                description: "Fresh fermented bamboo shoot simmered with smoked pork belly and green chilies.",
+                audioText: "Pork with Mesu. Angami style smoked pork boiled with tart fresh fermented bamboo shoots and wild mountain garlic."
+            },
+            {
+                id: 4,
+                title: "Raja Mircha & Fish Chutney",
+                tribe: "Lotha",
+                prepTime: "15 m",
+                image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=600&q=80",
+                description: "Charcoal roasted Naga King Chili mashed with fermented dried river fish and garlic.",
+                audioText: "Raja Mircha Chutney. A Lotha relish made from charcoal roasted ghost peppers and fermented dried river fish."
+            },
+            {
+                id: 5,
+                title: "Bamboo Tube Roasted Fish",
+                tribe: "Konyak",
+                prepTime: "55 m",
+                image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80",
+                description: "Fresh river fish marinated with wild herbs and slow roasted inside green bamboo stems.",
+                audioText: "Sungtuk Fish. Konyak culinary heritage of roasting freshwater fish sealed inside fresh green bamboo over fire embers."
+            },
+            {
+                id: 6,
+                title: "Angami Galho Porridge",
+                tribe: "Chakhesang",
+                prepTime: "30 m",
+                image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&q=80",
+                description: "Hearty rice and wild herb porridge seasoned with fermented lard and wild ginger.",
+                audioText: "Galho. A comforting traditional rice porridge infused with wild foraged forest greens and fermented seasonings."
+            }
+        ];
+
+        // State variables
+        let selectedTribe = 'All';
+        let savedBookmarks = JSON.parse(localStorage.getItem('naga_bookmarks') || '[]');
+        let currentAudioId = null;
+        let isAudioPlaying = false;
+        let speechSynth = window.speechSynthesis;
+        let speechUtterance = null;
+        let audioTimerInterval = null;
+        let audioProgressSeconds = 0;
+
+        // Render Recipe Cards Grid
+        function renderRecipes() {
+            const grid = document.getElementById('recipe-grid');
+            const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+            const emptyState = document.getElementById('empty-state');
+
+            const filtered = recipesData.filter(recipe => {
+                const matchesTribe = (selectedTribe === 'All' || recipe.tribe.toLowerCase() === selectedTribe.toLowerCase());
+                const matchesSearch = recipe.title.toLowerCase().includes(searchVal) ||
+                                     recipe.description.toLowerCase().includes(searchVal) ||
+                                     recipe.tribe.toLowerCase().includes(searchVal);
+                return matchesTribe && matchesSearch;
+            });
+
+            document.getElementById('recipe-count').innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            grid.innerHTML = filtered.map(recipe => {
+                const isBookmarked = savedBookmarks.includes(recipe.id);
+                const isPlayingThisCard = currentAudioId === recipe.id && isAudioPlaying;
+
+                return `
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-stone-200/90 flex flex-col justify-between hover:shadow-md transition-all">
+                    <!-- Image and Badge Header -->
+                    <div class="relative h-32 sm:h-44 bg-stone-900 overflow-hidden">
+                        <img src="${recipe.image}" alt="${recipe.title}" onerror="this.src='https://placehold.co/600x400/1C1917/D97706?text=${encodeURIComponent(recipe.title)}'" 
+                             class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-300">
+                        
+                        <!-- Tribal Badge -->
+                        <span class="absolute top-2 left-2 bg-stone-900/80 backdrop-blur-md text-amber-300 border border-amber-500/30 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
+                            ${recipe.tribe}
+                        </span>
+
+                        <!-- Bookmark Button -->
+                        <button onclick="toggleBookmark(${recipe.id})" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-stone-900/70 text-amber-300 flex items-center justify-center backdrop-blur-md border border-stone-700/60 transition-transform active:scale-90">
+                            <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark text-xs"></i>
+                        </button>
+
+                        <!-- Prep Time Pill -->
+                        <span class="absolute bottom-2 left-2 bg-stone-900/80 text-stone-200 text-[10px] px-2 py-0.5 rounded border border-stone-700/80">
+                            <i class="fa-regular fa-clock mr-1 text-amber-400"></i>${recipe.prepTime}
+                        </span>
+                    </div>
+
+                    <!-- Card Body Content -->
+                    <div class="p-2.5 sm:p-4 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-heading font-bold text-stone-900 text-xs sm:text-sm leading-snug mb-1 line-clamp-1">
+                                ${recipe.title}
+                            </h4>
+                            <p class="text-stone-500 text-[11px] sm:text-xs line-clamp-2 leading-tight mb-3">
+                                ${recipe.description}
+                            </p>
+                        </div>
+
+                        <!-- Audio Pronunciation Button -->
+                        <button onclick="playRecipeAudio(${recipe.id})" 
+                                class="w-full py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center space-x-1.5 transition-all ${isPlayingThisCard ? 'bg-amber-500 text-stone-950 animate-pulse' : 'bg-stone-900 text-amber-300 hover:bg-naga-red hover:text-white'}">
+                            <i class="fa-solid ${isPlayingThisCard ? 'fa-circle-pause' : 'fa-circle-play text-amber-400'}"></i>
+                            <span class="truncate">${isPlayingThisCard ? 'Playing...' : 'Audio Lore'}</span>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Filter and Search Actions
+        function filterRecipes() {
+            const searchVal = document.getElementById('search-input').value;
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (searchVal.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderRecipes();
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            renderRecipes();
+        }
+
+        function setTribeFilter(tribe) {
+            selectedTribe = tribe;
+            document.querySelectorAll('.tribe-chip').forEach(btn => {
+                if (btn.innerText.toLowerCase().includes(tribe.toLowerCase()) || (tribe === 'All' && btn.innerText.includes('All'))) {
+                    btn.className = "tribe-chip active-chip text-xs px-3 py-1.5 rounded-lg font-bold flex-shrink-0 transition-all border border-naga-red bg-naga-red text-white shadow-sm";
+                } else {
+                    btn.className = "tribe-chip text-xs px-3 py-1.5 rounded-lg font-medium flex-shrink-0 transition-all border border-stone-200 bg-stone-100 text-stone-700 hover:bg-stone-200";
+                }
+            });
+            renderRecipes();
+        }
+
+        function resetAllFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            setTribeFilter('All');
+        }
+
+        // Audio Player Execution
+        function playRecipeAudio(id) {
+            const recipe = recipesData.find(r => r.id === id);
+            if (!recipe) return;
+
+            if (currentAudioId === id && isAudioPlaying) {
+                speechSynth.cancel();
+                stopAudioTimer();
+                isAudioPlaying = false;
+                currentAudioId = null;
+                updateAudioBarUI();
+                renderRecipes();
+                return;
+            }
+
+            speechSynth.cancel();
+            currentAudioId = id;
+            isAudioPlaying = true;
+
+            speechUtterance = new SpeechSynthesisUtterance(recipe.audioText);
+            speechUtterance.rate = 0.9;
+
+            speechUtterance.onend = () => {
+                isAudioPlaying = false;
+                currentAudioId = null;
+                stopAudioTimer();
+                updateAudioBarUI();
+                renderRecipes();
+            };
+
+            speechSynth.speak(speechUtterance);
+
+            document.getElementById('audio-dish-title').innerText = recipe.title;
+            document.getElementById('audio-tribe-badge').innerText = recipe.tribe;
+            
+            showAudioPlayerBar();
+            startAudioTimer();
+            renderRecipes();
+        }
+
+        function toggleAudioPlayback() {
+            if (!currentAudioId) return;
+            if (isAudioPlaying) {
+                speechSynth.pause();
+                isAudioPlaying = false;
+            } else {
+                speechSynth.resume();
+                isAudioPlaying = true;
+            }
+            updateAudioBarUI();
+            renderRecipes();
+        }
+
+        function showAudioPlayerBar() {
+            document.getElementById('audio-player-bar').classList.remove('translate-y-full');
+            updateAudioBarUI();
+        }
+
+        function closeAudioPlayer() {
+            speechSynth.cancel();
+            stopAudioTimer();
+            isAudioPlaying = false;
+            currentAudioId = null;
+            document.getElementById('audio-player-bar').classList.add('translate-y-full');
+            renderRecipes();
+        }
+
+        function updateAudioBarUI() {
+            const playBtn = document.getElementById('audio-play-pause-btn');
+            playBtn.innerHTML = isAudioPlaying 
+                ? '<i class="fa-solid fa-pause text-sm"></i>' 
+                : '<i class="fa-solid fa-play text-sm ml-0.5"></i>';
+        }
+
+        function startAudioTimer() {
+            stopAudioTimer();
+            audioProgressSeconds = 0;
+            audioTimerInterval = setInterval(() => {
+                if (isAudioPlaying) {
+                    audioProgressSeconds += 1;
+                    const pct = Math.min((audioProgressSeconds / 15) * 100, 100);
+                    document.getElementById('audio-progress-bar').style.width = `${pct}%`;
+                    document.getElementById('audio-current-time').innerText = `0:${audioProgressSeconds.toString().padStart(2, '0')}`;
+                    if (audioProgressSeconds >= 15) stopAudioTimer();
+                }
+            }, 1000);
+        }
+
+        function stopAudioTimer() {
+            if (audioTimerInterval) clearInterval(audioTimerInterval);
+            document.getElementById('audio-progress-bar').style.width = '0%';
+            document.getElementById('audio-current-time').innerText = '0:00';
+        }
+
+        // Bookmark Storage Management
+        function toggleBookmark(id) {
+            if (savedBookmarks.includes(id)) {
+                savedBookmarks = savedBookmarks.filter(bId => bId !== id);
+            } else {
+                savedBookmarks.push(id);
+            }
+            localStorage.setItem('naga_bookmarks', JSON.stringify(savedBookmarks));
+            updateBookmarkBadges();
+            renderRecipes();
+        }
+
+        function updateBookmarkBadges() {
+            const count = savedBookmarks.length;
+            document.getElementById('nav-fav-badge').innerText = count;
+            document.getElementById('mobile-fav-badge').innerText = count;
+        }
+
+        function openSavedLoreModal() {
+            const modal = document.getElementById('saved-modal');
+            const list = document.getElementById('saved-list');
+            const savedItems = recipesData.filter(r => savedBookmarks.includes(r.id));
+
+            if (savedItems.length === 0) {
+                list.innerHTML = `<p class="text-xs text-stone-400 text-center py-6">No saved recipes. Tap the bookmark icon on any dish card to save it here.</p>`;
+            } else {
+                list.innerHTML = savedItems.map(item => `
+                    <div class="flex items-center justify-between p-2 rounded-lg border border-stone-200 bg-stone-50">
+                        <div class="flex items-center space-x-2">
+                            <img src="${item.image}" class="w-10 h-10 rounded object-cover">
+                            <div>
+                                <h5 class="font-heading font-bold text-xs text-stone-900">${item.title}</h5>
+                                <span class="text-[10px] text-naga-red font-semibold">${item.tribe} Tribe</span>
+                            </div>
+                        </div>
+                        <button onclick="toggleBookmark(${item.id}); openSavedLoreModal();" class="text-stone-400 hover:text-red-700 p-1">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeSavedLoreModal() {
+            document.getElementById('saved-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function openTribeModal() {
+            document.getElementById('tribe-modal').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeTribeModal() {
+            document.getElementById('tribe-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Initialize App on load
+        window.onload = function() {
+            updateBookmarkBadges();
+            renderRecipes();
+        };
+    </script>
+</body>
+</html>
